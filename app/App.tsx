@@ -5,6 +5,7 @@ import Details from "@/routes/questionaryTabs/DetailsTab";
 import Patients from "@/routes/questionaryTabs/PatientsTab";
 import Sections from "@/routes/questionaryTabs/SectionTab";
 import Welcome from "@/routes/questionaryTabs/welcome";
+import FormsManagement from "@/routes/FormsManagement";
 import SidebarLayout from "@/routes/layouts/Sidebar";
 import Patient from "@/routes/patients/patient";
 import Settings from "@/routes/settings";
@@ -16,7 +17,7 @@ export default function App() {
         <Routes>
           <Route element={<SidebarLayout />}>
             <Route element={<Welcome />} path="/" />
-            <Route element={<Welcome />} path="forms" />
+            <Route element={<FormsManagement />} path="forms" />
             <Route element={<Details />} path="forms/:questionaryId/details" />
             <Route
               element={<Patients />}
