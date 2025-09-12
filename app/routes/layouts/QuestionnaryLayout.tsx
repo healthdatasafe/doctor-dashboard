@@ -45,7 +45,7 @@ export function QuestionnaryLayout({
     <>
       <article className="prose mb-4">
         <h2 className="font-normal">
-          {l(collector.statusData.requestContent.title)}
+          {l(collector.request.content.title)}
         </h2>
       </article>
       <Tabbar collector={collector} />

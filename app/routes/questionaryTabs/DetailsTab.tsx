@@ -8,7 +8,7 @@ export default function DetailsTab() {
   return (
     <QuestionnaryLayout
       render={(collector: Collector) => {
-        const { requestContent } = collector.statusData;
+        const requestContent = collector.request.content;
         return (
           <div className="m-4 ml-8">
             <div className="m-4 prose ml-8">

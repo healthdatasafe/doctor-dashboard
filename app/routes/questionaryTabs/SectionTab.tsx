@@ -12,7 +12,7 @@ export default function SectionTab() {
     <QuestionnaryLayout
       render={(collector: Collector) => {
         console.log(">>> Section:", { sectionKey, collector });
-        const appData = collector?.statusData.requestContent.app.data;
+        const appData = collector?.request.content.app.data;
         const sectionData = appData?.forms[sectionKey];
         if (sectionData == null) {
           return <> No Data .. </>;

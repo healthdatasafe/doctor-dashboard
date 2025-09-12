@@ -25,8 +25,7 @@ function Tab({ href, label }: { href: string; label: string }) {
 
 function Tabbar({ collector }: { collector: Collector }) {
   const tabs: { href: string; label: string }[] = [];
-  const { requestContent } = collector.statusData;
-
+  const requestContent = collector.request.content;
   if (requestContent.app.data.forms) {
     for (const [formSectionKey, formSection] of Object.entries(
       requestContent.app.data.forms,

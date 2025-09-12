@@ -177,7 +177,7 @@ async function initDemoAccount() {
       },
       version: "0",
     };
-    newCollector.statusData.requestContent = requestContent;
+    newCollector.request.setContent(requestContent);
     await newCollector.save(); // save the data (done when the form is edited)
     await newCollector.publish();
     console.log("## initDemoAccount published", newCollector);
