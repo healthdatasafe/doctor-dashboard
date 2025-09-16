@@ -8,19 +8,18 @@ export default function DetailsTab() {
   return (
     <QuestionnaryLayout
       render={(collector: Collector) => {
-        const requestContent = collector.request.content;
         return (
           <div className="m-4 ml-8">
             <div className="m-4 prose ml-8">
               <h2 className="font-normal">{t("description")}</h2>
-              <p>{l(requestContent.description)}</p>
+              <p>{l(collector.request.description)}</p>
               <h2 className="font-normal">{t("consent")}</h2>
-              <p>{l(requestContent.consent)}</p>
+              <p>{l(collector.request.consent)}</p>
               <h2 className="font-normal">{t("permissions")}</h2>
               <p>{t("permissionsExplanation")}</p>
               <h3 className="italic">{t("list")}</h3>
               <ul>
-                {requestContent.permissions.map((p: any) => {
+                {collector.request.permissions.map((p: any) => {
                   if (!p.level) return <></>;
                   return (
                     <li key={p.streamId + " " + p.level}>

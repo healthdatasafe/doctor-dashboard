@@ -1,3 +1,4 @@
+import { localizeText } from "hds-lib-js";
 import type Collector from "hds-lib-js/types/appTemplates/Collector";
 import i18next from "i18next";
 import { NavLink } from "react-router-dom";
@@ -25,17 +26,14 @@ function Tab({ href, label }: { href: string; label: string }) {
 
 function Tabbar({ collector }: { collector: Collector }) {
   const tabs: { href: string; label: string }[] = [];
-  const requestContent = collector.request.content;
-  if (requestContent.app.data.forms) {
-    for (const [formSectionKey, formSection] of Object.entries(
-      requestContent.app.data.forms,
-    ) as any) {
-      tabs.push({
-        href: `/forms/${collector.id}/section-${formSectionKey}`,
-        label: `${i18next.t("section")} ${(formSection as any).name}`,
-      });
-    }
+
+  for (const section of collector.request.sections) {
+    tabs.push({
+      href: `/forms/${collector.id}/section-${section.key}`,
+      label: `${i18next.t("section")} ${localizeText(section.name)}`,
+    });
   }
+
 
   return (
     <ul className="flex flex-wrap border-b border-gray-200 text-center text-sm font-medium text-gray-500 dark:border-gray-700 dark:text-gray-400">

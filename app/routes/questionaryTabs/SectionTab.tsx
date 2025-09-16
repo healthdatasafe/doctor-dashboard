@@ -12,9 +12,8 @@ export default function SectionTab() {
     <QuestionnaryLayout
       render={(collector: Collector) => {
         console.log(">>> Section:", { sectionKey, collector });
-        const appData = collector?.request.content.app.data;
-        const sectionData = appData?.forms[sectionKey];
-        if (sectionData == null) {
+        const section = collector?.request.getSectionByKey(sectionKey);
+        if (section == null) {
           return <> No Data .. </>;
         }
 
@@ -23,7 +22,7 @@ export default function SectionTab() {
             <div className="m-4 prose ml-8">
               <h2 className="font-normal">Profile (permanent)</h2>
               <ul>
-                {sectionData.itemKeys.map((itemKey: string) => {
+                {section.itemKeys.map((itemKey: string) => {
                   const itemDef = model.itemsDefs.forKey(itemKey);
                   return <ItemDef key={itemDef.key} itemDef={itemDef} />;
                 })}
