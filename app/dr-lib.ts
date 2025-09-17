@@ -1,4 +1,5 @@
 import { appTemplates, l, pryv, initHDSModel, getHDSModel } from "hds-lib-js";
+import type { localizableTextLanguages } from "hds-lib-js/types/localizeText";
 
 /** The name of this application */
 const APP_MANAGING_NAME = "HDS Dr App PoC";
@@ -128,6 +129,7 @@ async function initDemoAccount() {
     throw new Error("appManaging is null");
   }
   const drConnectionInfo = await appManaging.connection.accessInfo();
+  const drUserName = drConnectionInfo.user.username;
 
   // -- check current collectors (forms)
   const collectors = await appManaging.getCollectors();
@@ -140,44 +142,29 @@ async function initDemoAccount() {
     }
     console.log("## initDemoAccount creating collector for", questionary);
     const newCollector = await appManaging.createCollector(questionary.title);
+    const request = newCollector.request;
+    request.appId = 'dr-form';
+    request.appUrl = 'https://xxx.yyy';
+    request.title = { en: questionary.title };
+    request.requesterName = 'Username ' + drUserName;
+    request.description = { en: 'Short Description to be updated: ' + questionary.title };
+    request.consent = { en: 'This is a consent message to be set' };
 
-    // create the request content
-    // 1- get all items from the questionnaire sections
-    const itemKeys = [];
-    for (const formContent of Object.values(questionary.forms)) {
-      itemKeys.push(...formContent.itemKeys);
+    // add static permissions
+    for (const extraPermission of questionary.permissionsPreRequest) {
+      request.addPermissionExtra(extraPermission);
     }
-    // 2 - get the permissions with eventual preRequest
-    const preRequest = questionary.permissionsPreRequest || [];
-    const permissions = getHDSModel().authorizations.forItemKeys(itemKeys, {
-      preRequest,
-    });
+    
+    // create the sections contents 
+    for (const [key, form] of Object.entries(questionary.forms)) {
+      const section = request.createSection(key, form.type);
+      section.setNameLocal(localizableTextLanguages.English, form.name);
+      section.addItemKeys(form.itemKeys);
+    }
+   
+    // build permissions needed
+    request.buildPermissions();
 
-    const requestContent = {
-      app: {
-        data: {
-          // will be used by patient app
-          forms: questionary.forms,
-        },
-        id: "dr-form",
-        url: "https://xxx.yyy",
-      },
-      consent: {
-        en: "This is a consent message to be set",
-      },
-      description: {
-        en: "Short Description to be updated: " + questionary.title,
-      },
-      permissions,
-      requester: {
-        name: "Username " + drConnectionInfo.user.username,
-      },
-      title: {
-        en: questionary.title,
-      },
-      version: "0",
-    };
-    newCollector.request.setContent(requestContent);
     await newCollector.save(); // save the data (done when the form is edited)
     await newCollector.publish();
     console.log("## initDemoAccount published", newCollector);
