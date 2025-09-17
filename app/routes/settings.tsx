@@ -1,60 +1,27 @@
 import { useAppContext } from "@/context/AppContext";
-import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-const DEFAULT_LANGUAGE = "en";
-const DEFAULT_THEME = window.matchMedia("(prefers-color-scheme: dark)").matches
-  ? "dark"
-  : "light";
 
 export default function Component() {
-  const { appManaging } = useAppContext();
+  const { changeTheme, changeLanguage , settings } = useAppContext();
   const { t } = useTranslation();
-  const [settings, setSettings] = useState<any | null>({
-    language: DEFAULT_LANGUAGE,
-    theme: DEFAULT_THEME,
-  });
 
   const languageOptions = [
     { text: "English", value: "en" },
     { text: "Español", value: "es" },
   ];
   const themeOptions = [
-    { text: t("darkMode"), value: "dark" },
     { text: t("lightMode"), value: "light" },
+    { text: t("darkMode"), value: "dark" },
   ];
 
   const switchTheme = (event) => {
-    saveSettings("theme", event.target.value);
+    changeTheme(event.target.value);
   };
 
   const switchLng = async (event) => {
-    saveSettings("language", event.target.value);
+    changeLanguage(event.target.value);
   };
-
-  async function saveSettings(key: string, value: any) {
-    setSettings({ ...settings, [key]: value });
-    await appManaging.setCustomSettings({ ...settings });
-  }
-
-  // settings loader
-  useEffect(() => {
-    const loadSettings = async () => {
-      const appSettings = await appManaging.getCustomSettings();
-      setSettings(appSettings);
-    };
-    loadSettings();
-  }, [appManaging]);
-
-  // update UI on state change
-  useEffect(() => {
-    document.body.setAttribute("data-theme", settings.theme);
-    if (settings.theme === "dark") {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-  }, [settings]);
 
   return (
     <>
