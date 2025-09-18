@@ -1,17 +1,17 @@
-import { l, getHDSModel } from "hds-lib-js";
-import { useParams } from "react-router-dom";
-import { QuestionnaryLayout } from "@/routes/layouts/QuestionnaryLayout";
-import type Collector from "hds-lib-js/types/appTemplates/Collector";
-import type HDSItemDef from "hds-lib-js/types/HDSModel/HDSItemDef";
+import { l, getHDSModel } from 'hds-lib-js';
+import { useParams } from 'react-router-dom';
+import { QuestionnaryLayout } from '@/routes/layouts/QuestionnaryLayout';
+import type Collector from 'hds-lib-js/types/appTemplates/Collector';
+import type HDSItemDef from 'hds-lib-js/types/HDSModel/HDSItemDef';
 
 export default function SectionTab() {
   const { sectionId: rawSectionId } = useParams();
-  const sectionKey = (rawSectionId ?? "").replace("section-", "");
+  const sectionKey = (rawSectionId ?? '').replace('section-', '');
   const model = getHDSModel();
   return (
     <QuestionnaryLayout
       render={(collector: Collector) => {
-        console.log(">>> Section:", { sectionKey, collector });
+        console.log('>>> Section:', { sectionKey, collector });
         const section = collector?.request.getSectionByKey(sectionKey);
         if (section == null) {
           return <> No Data .. </>;
@@ -36,7 +36,7 @@ export default function SectionTab() {
 }
 
 function ItemDef({ itemDef }: { itemDef: HDSItemDef }) {
-  if (itemDef.data.type === "select" && itemDef.data?.options) {
+  if (itemDef.data.type === 'select' && itemDef.data?.options) {
     return (
       <li key={itemDef.key}>
         <span>{itemDef.label}:</span>

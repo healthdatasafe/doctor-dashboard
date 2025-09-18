@@ -1,66 +1,66 @@
-import { appTemplates, l, pryv, initHDSModel, getHDSModel } from "hds-lib-js";
-import type { localizableTextLanguages } from "hds-lib-js/types/localizeText";
+import { appTemplates, l, pryv, initHDSModel, getHDSModel } from 'hds-lib-js';
+import type { localizableTextLanguages } from 'hds-lib-js/types/localizeText';
 
 /** The name of this application */
-const APP_MANAGING_NAME = "HDS Dr App PoC";
+const APP_MANAGING_NAME = 'HDS Dr App PoC';
 /** The "base" stream for this App */
-const APP_MANAGING_STREAMID = "app-dr-hds";
+const APP_MANAGING_STREAMID = 'app-dr-hds';
 /** initialized during pryvAuthStateChange */
 let appManaging: appTemplates.AppManagingAccount | null;
 
 /** following the APP GUIDELINES: https://api.pryv.com/guides/app-guidelines/ */
-const serviceInfoUrl = "https://demo.datasafe.dev/reg/service/info";
+const serviceInfoUrl = 'https://demo.datasafe.dev/reg/service/info';
 
 /** from common-data-defs.js */
 const v2 = {
-  "questionary-x": {
+  'questionary-x': {
     forms: {
       history: {
-        itemKeys: ["fertility-ttc-tta", "body-weight"],
-        key: "recurring-x",
-        name: "History",
-        type: "recurring",
+        itemKeys: ['fertility-ttc-tta', 'body-weight'],
+        key: 'recurring-x',
+        name: 'History',
+        type: 'recurring',
       },
       profile: {
         itemKeys: [
-          "profile-name",
-          "profile-surname",
-          "profile-sex",
-          "family-children-count",
-          "fertility-miscarriages-count",
+          'profile-name',
+          'profile-surname',
+          'profile-sex',
+          'family-children-count',
+          'fertility-miscarriages-count',
         ],
-        key: "profile-x",
-        name: "Profile",
-        type: "permanent",
+        key: 'profile-x',
+        name: 'Profile',
+        type: 'permanent',
       },
     },
-    permissionsPreRequest: [{ streamId: "profile" }, { streamId: "fertility" }],
-    title: "Demo with Profile and TTC-TTA 3",
+    permissionsPreRequest: [{ streamId: 'profile' }, { streamId: 'fertility' }],
+    title: 'Demo with Profile and TTC-TTA 3',
   },
-  "questionnary-basic": {
+  'questionnary-basic': {
     forms: {
       history: {
         itemKeys: [
-          "body-weight",
-          "body-vulva-wetness-feeling",
-          "body-vulva-mucus-inspect",
-          "body-vulva-mucus-stretch",
-          "fertility-cycles-start",
-          "fertility-cycles-ovulation",
+          'body-weight',
+          'body-vulva-wetness-feeling',
+          'body-vulva-mucus-inspect',
+          'body-vulva-mucus-stretch',
+          'fertility-cycles-start',
+          'fertility-cycles-ovulation',
         ],
-        key: "recurring-b",
-        name: "History",
-        type: "recurring",
+        key: 'recurring-b',
+        name: 'History',
+        type: 'recurring',
       },
       profile: {
-        itemKeys: ["profile-name", "profile-surname", "profile-date-of-birth"],
-        key: "profile-b",
-        name: "Profile",
-        type: "permanent",
+        itemKeys: ['profile-name', 'profile-surname', 'profile-date-of-birth'],
+        key: 'profile-b',
+        name: 'Profile',
+        type: 'permanent',
       },
     },
-    permissionsPreRequest: [{ streamId: "profile" }],
-    title: "Basic Profile and Cycle Information 3",
+    permissionsPreRequest: [{ streamId: 'profile' }],
+    title: 'Basic Profile and Cycle Information 3',
   },
 };
 
@@ -73,10 +73,10 @@ function getAppManaging(): appTemplates.AppManagingAccount | null {
 
 export function getLineForEvent(event: pryv.Event) {
   const line = {
-    formLabel: "Unknown",
-    formType: "Unknown",
-    repeatable: "any",
-    streamAndType: event.streamId + " - " + event.type,
+    formLabel: 'Unknown',
+    formType: 'Unknown',
+    repeatable: 'any',
+    streamAndType: event.streamId + ' - ' + event.type,
     time: new Date(event.time * 1000).toLocaleString(),
     value: JSON.stringify(event.content),
     streamId: event.streamIds[0],
@@ -89,30 +89,30 @@ export function getLineForEvent(event: pryv.Event) {
     line.formLabel = itemDef.label;
     line.formType = itemDef.data.type;
     line.repeatable = itemDef.data.repeatable;
-    if (line.formType === "date") {
-      line.value = new Date(event.time * 1000).toISOString().split("T")[0];
+    if (line.formType === 'date') {
+      line.value = new Date(event.time * 1000).toISOString().split('T')[0];
     }
-    if (line.formType === "select") {
+    if (line.formType === 'select') {
       line.value = event.content;
       let valueForSelect = event.content;
-      if (event.type === "ratio/generic") {
-        line.value = event.content.value + "/" + event.content.relativeTo;
+      if (event.type === 'ratio/generic') {
+        line.value = event.content.value + '/' + event.content.relativeTo;
         valueForSelect = event.content.value;
       }
 
-      console.log("ItemDef Options", itemDef.data.options, event.content);
+      console.log('ItemDef Options', itemDef.data.options, event.content);
       const selected = itemDef.data.options.find(
         (o) => o.value === valueForSelect,
       );
-      line.value = selected != null ? l(selected.label) : "-";
+      line.value = selected != null ? l(selected.label) : '-';
     }
-    if (line.formType === "checkbox") {
-      if (event.type === "activity/plain") {
-        line.value = "Yes";
+    if (line.formType === 'checkbox') {
+      if (event.type === 'activity/plain') {
+        line.value = 'Yes';
       }
     }
-    if (event.streamId === "body-weight" && event.type.startsWith("mass/")) {
-      const units = event.type.split("/").pop();
+    if (event.streamId === 'body-weight' && event.type.startsWith('mass/')) {
+      const units = event.type.split('/').pop();
       line.value = `${line.value} ${units}`;
     }
   }
@@ -126,7 +126,7 @@ export function getLineForEvent(event: pryv.Event) {
  * */
 async function initDemoAccount() {
   if (appManaging == null) {
-    throw new Error("appManaging is null");
+    throw new Error('appManaging is null');
   }
   const drConnectionInfo = await appManaging.connection.accessInfo();
   const drUserName = drConnectionInfo.user.username;
@@ -137,10 +137,10 @@ async function initDemoAccount() {
     // check if collector exists
     const found = collectors.find((c) => c.name === questionary.title);
     if (found) {
-      console.log("## initDemoAccount found", questionaryId, found);
+      console.log('## initDemoAccount found', questionaryId, found);
       continue; // stop here if exists
     }
-    console.log("## initDemoAccount creating collector for", questionary);
+    console.log('## initDemoAccount creating collector for', questionary);
     const newCollector = await appManaging.createCollector(questionary.title);
     const request = newCollector.request;
     request.appId = 'dr-form';
@@ -167,35 +167,35 @@ async function initDemoAccount() {
 
     await newCollector.save(); // save the data (done when the form is edited)
     await newCollector.publish();
-    console.log("## initDemoAccount published", newCollector);
+    console.log('## initDemoAccount published', newCollector);
   }
-  console.log("## initDemoAccount with", collectors);
+  console.log('## initDemoAccount with', collectors);
 }
 
 function showLoginButton(loginSpanId, stateChangeCallBack) {
   const authSettings = {
     authRequest: {
-      returnURL: "self#",
+      returnURL: 'self#',
       clientData: {
-        "app-web-auth:description": {
+        'app-web-auth:description': {
           content:
-            "This app allows to send invitation links to patients and visualize and export answers.",
-          type: "note/txt",
+            'This app allows to send invitation links to patients and visualize and export answers.',
+          type: 'note/txt',
         },
-        "app-web-auth:ensureBaseStreams": [
+        'app-web-auth:ensureBaseStreams': [
           // this is handled by custom app web Auth3 (might be migrated in permission request)
-          { id: "applications", name: "Applications" },
+          { id: 'applications', name: 'Applications' },
           {
             id: APP_MANAGING_STREAMID,
             name: APP_MANAGING_NAME,
-            parentId: "applications",
+            parentId: 'applications',
           },
         ],
       },
       requestedPermissions: [
         {
           defaultName: APP_MANAGING_NAME,
-          level: "manage",
+          level: 'manage',
           streamId: APP_MANAGING_STREAMID,
         },
       ],
@@ -210,7 +210,7 @@ function showLoginButton(loginSpanId, stateChangeCallBack) {
 
   async function pryvAuthStateChange(state) {
     // called each time the authentication state changes
-    console.log("## pryvAuthStateChange", state);
+    console.log('## pryvAuthStateChange', state);
     if (state.id === pryv.Browser.AuthStates.AUTHORIZED) {
       if (appManaging == null) {
         await initHDSModel(); // hds model needs to be initialized
@@ -221,18 +221,18 @@ function showLoginButton(loginSpanId, stateChangeCallBack) {
         );
         await initDemoAccount();
       } else {
-        console.log("!!!! AppManaging already initialized");
+        console.log('!!!! AppManaging already initialized');
       }
-      stateChangeCallBack("loggedIN");
+      stateChangeCallBack('loggedIN');
     }
     if (
       state.id === pryv.Browser.AuthStates.INITIALIZED ||
       state.id === pryv.Browser.AuthStates.SIGNOUT
     ) {
       appManaging = null;
-      stateChangeCallBack("loggedOUT");
+      stateChangeCallBack('loggedOUT');
     }
   }
 }
 
-export { getAppManaging, showLoginButton };
+export { getAppManaging,  showLoginButton };

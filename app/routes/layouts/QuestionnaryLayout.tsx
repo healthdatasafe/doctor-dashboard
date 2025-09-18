@@ -1,12 +1,12 @@
-import { type ReactNode, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { Tabbar } from "@/components/tabbar";
+import { type ReactNode, useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { Tabbar } from '@/components/tabbar';
 
-import { l } from "hds-lib-js";
+import { l } from 'hds-lib-js';
 
-import type { JSX } from "react/jsx-runtime";
-import type Collector from "hds-lib-js/types/appTemplates/Collector";
-import { useAppContext } from "@/context/AppContext";
+import type { JSX } from 'react/jsx-runtime';
+import type Collector from 'hds-lib-js/types/appTemplates/Collector';
+import { useAppContext } from '@/context/AppContext';
 
 interface QuestionnaryLayoutProps {
   children?: ReactNode;
@@ -27,7 +27,7 @@ export function QuestionnaryLayout({
 
   useEffect(() => {
     const loadCollector = async () => {
-      console.log("loadCollector", { appManaging });
+      console.log('loadCollector', { appManaging });
       if (!questionaryId || !appManaging) return;
       const col = await appManaging.getCollectorById(questionaryId);
       await col.init();

@@ -1,21 +1,21 @@
-import { localizeText } from "hds-lib-js";
-import type Collector from "hds-lib-js/types/appTemplates/Collector";
-import i18next from "i18next";
-import { NavLink } from "react-router-dom";
+import { localizeText } from 'hds-lib-js';
+import type Collector from 'hds-lib-js/types/appTemplates/Collector';
+import i18next from 'i18next';
+import { NavLink } from 'react-router-dom';
 
 function splitPop(path: string) {
-  return path.split("/").pop();
+  return path.split('/').pop();
 }
 
 function Tab({ href, label }: { href: string; label: string }) {
   const isCurrent = splitPop(href) === splitPop(window.location.pathname);
   const classes = isCurrent
-    ? "inline-block p-4 text-blue-600 bg-gray-100 rounded-t-lg active dark:bg-gray-800 dark:text-blue-500"
-    : "inline-block p-4 rounded-t-lg hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300";
+    ? 'inline-block p-4 text-blue-600 bg-gray-100 rounded-t-lg active dark:bg-gray-800 dark:text-blue-500'
+    : 'inline-block p-4 rounded-t-lg hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300';
 
   return (
     <NavLink
-      aria-current={isCurrent ? "page" : undefined}
+      aria-current={isCurrent ? 'page' : undefined}
       className={classes}
       to={href}
     >
@@ -30,7 +30,7 @@ function Tabbar({ collector }: { collector: Collector }) {
   for (const section of collector.request.sections) {
     tabs.push({
       href: `/forms/${collector.id}/section-${section.key}`,
-      label: `${i18next.t("section")} ${localizeText(section.name)}`,
+      label: `${i18next.t('section')} ${localizeText(section.name)}`,
     });
   }
 
@@ -40,13 +40,13 @@ function Tabbar({ collector }: { collector: Collector }) {
       <li className="me-2" key="patients">
         <Tab
           href={`/forms/${collector.id}/patients`}
-          label={i18next.t("patients")}
+          label={i18next.t('patients')}
         />
       </li>
       <li className="me-2" key="details">
         <Tab
           href={`/forms/${collector.id}/details`}
-          label={i18next.t("Details")}
+          label={i18next.t('Details')}
         />
       </li>
       {tabs.map(({ href, label }) => (

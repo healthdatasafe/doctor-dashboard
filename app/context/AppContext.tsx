@@ -1,10 +1,10 @@
-import React, { createContext, useState, useContext, useEffect } from "react";
-import type { appTemplates } from "hds-lib-js";
-import { settings as hdsLibSettings } from "hds-lib-js";
-import { getAppManaging } from "@/dr-lib";
-import { useTranslation } from "react-i18next";
+import React, { createContext, useState, useContext, useEffect } from 'react';
+import type { appTemplates } from 'hds-lib-js';
+import { settings as hdsLibSettings } from 'hds-lib-js';
+import { getAppManaging } from '@/dr-lib';
+import { useTranslation } from 'react-i18next';
 
-const DEFAULT_LANGUAGE = "en";
+const DEFAULT_LANGUAGE = 'en';
 // followiing could be considered for auto-setting: window.matchMedia("(prefers-color-scheme: dark)").matches
 const DEFAULT_THEME = 'light';
 
@@ -34,7 +34,7 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({
   const updateAppManaging = (app: appTemplates.AppManagingAccount | null) => {
     setAppManaging(app);
     loadSettings(app);
-    console.log("===== Updated App Managing", app);
+    console.log('===== Updated App Managing', app);
   };
 
   const loadSettings = async (app: appTemplates.AppManagingAccount | null) => {
@@ -43,23 +43,23 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({
     appSettings.language ??= DEFAULT_LANGUAGE;
     appSettings.theme ??= DEFAULT_THEME;
 
-    console.log("===== Setting loaded", appSettings);
+    console.log('===== Setting loaded', appSettings);
     setSettings(appSettings); // this causes settings to save at each load.. 
   }
 
   async function saveSettings() {
     if (appManaging == null) return;
-    console.log("===== Setting saved", settings);
+    console.log('===== Setting saved', settings);
     await appManaging.setCustomSettings({ ...settings });
   }
 
   // update UI on state change
   useEffect(() => {
-    document.body.setAttribute("data-theme", settings.theme);
-    if (settings.theme === "dark") {
-      document.documentElement.classList.add("dark");
+    document.body.setAttribute('data-theme', settings.theme);
+    if (settings.theme === 'dark') {
+      document.documentElement.classList.add('dark');
     } else {
-      document.documentElement.classList.remove("dark");
+      document.documentElement.classList.remove('dark');
     }
     saveSettings(); 
   }, [settings]);
@@ -96,7 +96,7 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({
 export const useAppContext = (): AppContextType => {
   const context = useContext(AppContext);
   if (context === undefined) {
-    throw new Error("useAppContext must be used within an AppContextProvider");
+    throw new Error('useAppContext must be used within an AppContextProvider');
   }
   return context;
 };

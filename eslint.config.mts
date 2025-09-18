@@ -1,43 +1,86 @@
 import eslint from "@eslint/js";
-import prettierConfig from "eslint-config-prettier";
-import pluginReact from "eslint-plugin-react";
-import { globalIgnores } from "eslint/config";
 import globals from "globals";
+import reactPlugin from "eslint-plugin-react";
 import tseslint from "typescript-eslint";
+import { FlatCompat } from "@eslint/eslintrc";
+
+const compat = new FlatCompat({ baseDirectory: import.meta.dirname });
 
 export default tseslint.config(
-  globalIgnores([".react-router/", "build/"]),
-  eslint.configs.recommended,
-  tseslint.configs.strict,
-  tseslint.configs.stylisticTypeChecked,
-  pluginReact.configs.flat.recommended,
-  prettierConfig,
+  // Ignores
   {
-    files: ["**/*.{js,ts}"],
-    languageOptions: {
-      globals: globals.browser,
-    },
+    ignores: [
+      "node_modules/",
+      "coverage/",
+      "build/",
+      "dist/",
+    ],
   },
+
+  // Base language options and plugins
   {
     languageOptions: {
-      parserOptions: {
-        projectService: true,
-        tsconfigRootDir: import.meta.dirname,
+      ecmaVersion: 2022,
+      sourceType: "module",
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+        ...globals.mocha,
       },
     },
+    settings: {
+      react: { version: "detect" },
+    },
+    plugins: {
+      react: reactPlugin,
+    },
+  },
+
+  // Recommended configs
+  eslint.configs.recommended,
+  ...tseslint.configs.recommended,
+
+  // Apply Standard & SemiStandard to TS/TSX using FlatCompat
+  {
+    files: ["**/*.ts", "**/*.tsx"],
+    rules: {},
+    ...compat.extends("standard")[0],
   },
   {
+    files: ["**/*.ts", "**/*.tsx"],
+    rules: {},
+    ...compat.extends("semistandard")[0],
+  },
+
+  // TypeScript-specific rules mirroring legacy config
+  {
+    files: ["**/*.ts", "**/*.tsx", "**/*.d.ts"],
     rules: {
       "@typescript-eslint/no-explicit-any": "off",
-      "react/prop-types": "off",
-      "react/react-in-jsx-scope": "off",
+      // types are hoisted; avoid false positives in TS
+      "no-use-before-define": "off",
+      "@typescript-eslint/no-use-before-define": "off",
     },
   },
+
+  // Enable JSX parsing for React files
   {
-    settings: {
-      react: {
-        version: "detect",
-      },
+    files: ["**/*.jsx", "**/*.tsx"],
+    languageOptions: {
+      parserOptions: { ecmaFeatures: { jsx: true } },
+    },
+    rules: {
+      // Add React rules here if needed in future
     },
   },
+
+  // Ensure single quotes
+  {
+    files: ["**/*.ts", "**/*.tsx"],
+    rules: {
+      quotes: ["error", "single", { avoidEscape: true, allowTemplateLiterals: true }],
+    },
+  }
 );
+
+

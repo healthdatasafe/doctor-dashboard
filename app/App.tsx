@@ -1,13 +1,13 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
-import { AppContextProvider } from "./context/AppContext";
-import Details from "@/routes/questionaryTabs/DetailsTab";
-import Patients from "@/routes/questionaryTabs/PatientsTab";
-import Sections from "@/routes/questionaryTabs/SectionTab";
-import Welcome from "@/routes/questionaryTabs/welcome";
-import SidebarLayout from "@/routes/layouts/Sidebar";
-import Patient from "@/routes/patients/patient";
-import Settings from "@/routes/settings";
+import { AppContextProvider } from './context/AppContext';
+import Details from '@/routes/questionaryTabs/DetailsTab';
+import Patients from '@/routes/questionaryTabs/PatientsTab';
+import Sections from '@/routes/questionaryTabs/SectionTab';
+import Welcome from '@/routes/questionaryTabs/welcome';
+import SidebarLayout from '@/routes/layouts/sidebar';
+import Patient from '@/routes/patients/patient';
+import Settings from '@/routes/settings';
 
 export default function App() {
   return (

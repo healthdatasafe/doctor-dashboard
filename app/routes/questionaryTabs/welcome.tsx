@@ -1,4 +1,4 @@
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 
 export default function Component() {
   const { t } = useTranslation();
@@ -6,7 +6,7 @@ export default function Component() {
   return (
     <>
       <article className="prose mb-4">
-        <h2 className="font-normal">{t("chooseAFormInSideBar")}</h2>
+        <h2 className="font-normal">{t('chooseAFormInSideBar')}</h2>
       </article>
     </>
   );

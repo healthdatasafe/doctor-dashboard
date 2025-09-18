@@ -1,21 +1,21 @@
-import { useTranslation } from "react-i18next";
-import { NavLink } from "react-router-dom";
+import { useTranslation } from 'react-i18next';
+import { NavLink } from 'react-router-dom';
 
-import { Header } from "@/components/table";
-import { useEffect, useState } from "react";
-import type Collector from "hds-lib-js/types/appTemplates/Collector";
-import type CollectorInvite from "hds-lib-js/types/appTemplates/CollectorInvite";
+import { Header } from '@/components/table';
+import { useEffect, useState } from 'react';
+import type Collector from 'hds-lib-js/types/appTemplates/Collector';
+import type CollectorInvite from 'hds-lib-js/types/appTemplates/CollectorInvite';
 
-const classes = "flex items-center gap-1";
+const classes = 'flex items-center gap-1';
 
 function Actions({ patient }: { patient: CollectorInvite }) {
   const { t } = useTranslation();
   const [sharingLink, setSharingLink] = useState<string | null>(null);
   useEffect(() => {
     const loadLink = async () => {
-      if (patient.status !== "pending") return;
+      if (patient.status !== 'pending') return;
       const inviteSharingData = await patient.getSharingData();
-      const patientURL = "https://demo-forms.datasafe.dev/patient.html";
+      const patientURL = 'https://demo-forms.datasafe.dev/patient.html';
       setSharingLink(
         `${patientURL}?apiEndpoint=${inviteSharingData.apiEndpoint}&eventId=${inviteSharingData.eventId}`,
       );
@@ -24,25 +24,25 @@ function Actions({ patient }: { patient: CollectorInvite }) {
   }, [patient]);
 
   const aclasses =
-    "font-medium text-blue-600 hover:underline dark:text-blue-500";
-  if (patient.status === "active") {
+    'font-medium text-blue-600 hover:underline dark:text-blue-500';
+  if (patient.status === 'active') {
     return (
       <NavLink
         className={aclasses}
         to={`/patients/${patient.collector.id}/${patient.key}`}
       >
         <span className={classes}>
-          <img src="https://style.datasafe.dev/images/icons/folder-open-outline.svg" />{" "}
-          {t("viewData")}
+          <img src="https://style.datasafe.dev/images/icons/folder-open-outline.svg" />{' '}
+          {t('viewData')}
         </span>
       </NavLink>
     );
-  } else if (patient.status === "pending") {
+  } else if (patient.status === 'pending') {
     if (sharingLink == null) {
-      return <span className="flex items-center gap-3">{t("loading")}</span>;
+      return <span className="flex items-center gap-3">{t('loading')}</span>;
     }
-    const subject = t("emailSubject");
-    const body = t("emailBody", { link: sharingLink });
+    const subject = t('emailSubject');
+    const body = t('emailBody', { link: sharingLink });
     const href = `mailto:?subject=${subject}&body=${encodeURIComponent(body)}`;
     return (
       <span className="flex items-center gap-3">
@@ -78,8 +78,8 @@ function Copy() {
   const { t } = useTranslation();
   return (
     <span className={classes}>
-      <img src="https://style.datasafe.dev/images/icons/file-copy-alt-solid.svg" />{" "}
-      {t("copyToClipboard")}
+      <img src="https://style.datasafe.dev/images/icons/file-copy-alt-solid.svg" />{' '}
+      {t('copyToClipboard')}
     </span>
   );
 }
@@ -88,15 +88,15 @@ function Email() {
   const { t } = useTranslation();
   return (
     <span className={classes}>
-      <img src="https://style.datasafe.dev/images/icons/mail-box-outline.svg" />{" "}
-      {t("sendByEmail")}
+      <img src="https://style.datasafe.dev/images/icons/mail-box-outline.svg" />{' '}
+      {t('sendByEmail')}
     </span>
   );
 }
 
 function handleClick(link: string) {
   navigator.clipboard.writeText(link);
-  alert("Copied the sharing link to clipboard");
+  alert('Copied the sharing link to clipboard');
 }
 
 function PatientsTable({ collector }: { collector: Collector }) {
@@ -106,9 +106,9 @@ function PatientsTable({ collector }: { collector: Collector }) {
   useEffect(() => {
     const loadPatients = async () => {
       // check inbox for new incoming accepted requests
-      console.log("Patient table use effects", { collector });
+      console.log('Patient table use effects', { collector });
       const newCollectorInvites = await collector.checkInbox();
-      console.log("## new patients inbox ", newCollectorInvites);
+      console.log('## new patients inbox ', newCollectorInvites);
 
       // get all patients
       const invites = await collector.getInvites();
@@ -121,10 +121,10 @@ function PatientsTable({ collector }: { collector: Collector }) {
   }, [collector]);
 
   const columns = [
-    t("status"),
-    t("patientReference"),
-    t("submissionDate"),
-    t("actions"),
+    t('status'),
+    t('patientReference'),
+    t('submissionDate'),
+    t('actions'),
   ];
   return (
     <div className="relative my-4 overflow-x-auto shadow-md sm:rounded-lg">
@@ -141,32 +141,32 @@ function PatientsTable({ collector }: { collector: Collector }) {
 function Status({ status }: { status: string }) {
   const { t } = useTranslation();
   switch (status) {
-    case "active":
+    case 'active':
       return (
         <span className={classes}>
-          <img src="https://style.datasafe.dev/images/icons/badge-check.svg" />{" "}
-          <span className="dark:text-gray-400">{t("active")}</span>
+          <img src="https://style.datasafe.dev/images/icons/badge-check.svg" />{' '}
+          <span className="dark:text-gray-400">{t('active')}</span>
         </span>
       );
-    case "pending":
+    case 'pending':
       return (
         <span className={classes}>
-          <img src="https://style.datasafe.dev/images/icons/clock-arrow.svg" />{" "}
-          <span className="dark:text-gray-400">{t("pending")}</span>
+          <img src="https://style.datasafe.dev/images/icons/clock-arrow.svg" />{' '}
+          <span className="dark:text-gray-400">{t('pending')}</span>
         </span>
       );
-    case "refused":
+    case 'refused':
       return (
         <span className={classes}>
-          <img src="https://style.datasafe.dev/images/icons/close.svg" />{" "}
-          <span className="dark:text-gray-400">{t("refused")}</span>
+          <img src="https://style.datasafe.dev/images/icons/close.svg" />{' '}
+          <span className="dark:text-gray-400">{t('refused')}</span>
         </span>
       );
-    case "revoked":
+    case 'revoked':
       return (
         <span className={classes}>
-          <img src="https://style.datasafe.dev/images/icons/ban.svg" />{" "}
-          <span className="dark:text-gray-400">{t("revoked")}</span>
+          <img src="https://style.datasafe.dev/images/icons/ban.svg" />{' '}
+          <span className="dark:text-gray-400">{t('revoked')}</span>
         </span>
       );
     default:

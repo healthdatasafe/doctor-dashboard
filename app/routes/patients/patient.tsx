@@ -1,17 +1,17 @@
-import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { NavLink } from "react-router-dom";
-import { useParams } from "react-router-dom";
-import { Card } from "@/components/card";
-import { Table } from "@/components/table";
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { NavLink } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { Card } from '@/components/card';
+import { Table } from '@/components/table';
 
-import i18next from "i18next";
+import i18next from 'i18next';
 
-import { l, type pryv } from "hds-lib-js";
-import { getLineForEvent } from "@/dr-lib";
+import { l, type pryv } from 'hds-lib-js';
+import { getLineForEvent } from '@/dr-lib';
 
-import type Collector from "hds-lib-js/types/appTemplates/Collector";
-import { useAppContext } from "@/context/AppContext";
+import type Collector from 'hds-lib-js/types/appTemplates/Collector';
+import { useAppContext } from '@/context/AppContext';
 
 export default function Component() {
   const { t } = useTranslation();
@@ -49,9 +49,9 @@ export default function Component() {
       };
       function forEachEvent(event: pryv.Event) {
         const line = getLineForEvent(event);
-        console.log(">> Event patiendata", event);
+        console.log('>> Event patiendata', event);
 
-        if (line.repeatable === "none") {
+        if (line.repeatable === 'none') {
           contentData.nonRepeatableData.push({
             label: line.formLabel,
             value: line.value,
@@ -67,23 +67,23 @@ export default function Component() {
 
       // will load events
       await invite.connection.getEventsStreamed({ limit: 10000 }, forEachEvent);
-      console.log(">> Event patiendata Done");
+      console.log('>> Event patiendata Done');
       setPatientData(contentData);
     };
     loadCollector();
   }, [appManaging, questionaryId, inviteId]);
 
   const back = `/forms/${questionaryId}/patients`;
-  const content = t("backToForm");
+  const content = t('backToForm');
 
   if (collector == null || patientData == null) return <>Loading...</>;
 
   const tableData = {
-    columns: [i18next.t("date"), i18next.t("label"), i18next.t("value")],
+    columns: [i18next.t('date'), i18next.t('label'), i18next.t('value')],
     data: patientData.repeatableDataRows,
   };
 
-  console.log("### tableData", tableData);
+  console.log('### tableData', tableData);
 
   return (
     <>
@@ -92,7 +92,7 @@ export default function Component() {
           {l(collector.request.content.title)}
         </h2>
         <h3 className="italic">
-          {t("dataFor")} {patientData.name}
+          {t('dataFor')} {patientData.name}
         </h3>
         <NavLink
           className="font-medium text-blue-600 hover:underline dark:text-blue-500"
