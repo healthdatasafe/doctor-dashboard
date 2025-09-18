@@ -4,10 +4,10 @@ import { AppContextProvider } from './context/AppContext';
 import Details from '@/routes/questionaryTabs/DetailsTab';
 import Patients from '@/routes/questionaryTabs/PatientsTab';
 import Sections from '@/routes/questionaryTabs/SectionTab';
-import Welcome from '@/routes/questionaryTabs/welcome';
-import SidebarLayout from '@/routes/layouts/sidebar';
-import Patient from '@/routes/patients/patient';
-import Settings from '@/routes/settings';
+import Welcome from '@/routes/questionaryTabs/Welcome';
+import SidebarLayout from '@/routes/layouts/SidebarLayout';
+import Patient from '@/routes/patients/PatientData';
+import Settings from '@/routes/Settings';
 
 export default function App() {
   return (

@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
-import { Card } from '@/components/card';
-import { Table } from '@/components/table';
+import { Card } from '@/components/Card';
+import { Table } from '@/components/Table';
 
 import i18next from 'i18next';
 
@@ -13,7 +13,7 @@ import { getLineForEvent } from '@/dr-lib';
 import type Collector from 'hds-lib-js/types/appTemplates/Collector';
 import { useAppContext } from '@/context/AppContext';
 
-export default function Component() {
+export default function PatientData() {
   const { t } = useTranslation();
   const { questionaryId, inviteId } = useParams<string>();
   const { appManaging } = useAppContext();

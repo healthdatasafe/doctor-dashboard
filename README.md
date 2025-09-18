@@ -40,8 +40,6 @@ npm run build
 - [i18next](https://www.i18next.com/): internationalization framework
 - [Inter](https://fonts.google.com/specimen/Inter): font
 - [Knip](https://knip.dev/): code decluttering
-- [Prettier](https://prettier.io/) with the following plugins:
-  - [Tailwind CSS](https://tailwindcss.com/blog/automatic-class-sorting-with-prettier)
 - [React Router](https://reactrouter.com/): [React](https://react.dev/) framework
 - [Tailwind CSS](https://tailwindcss.com/) with the following plugins:
   - [Typography](https://github.com/tailwindlabs/tailwindcss-typography))

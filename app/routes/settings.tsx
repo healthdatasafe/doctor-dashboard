@@ -2,7 +2,7 @@ import { useAppContext } from '@/context/AppContext';
 import { useTranslation } from 'react-i18next';
 
 
-export default function Component() {
+export default function Settings() {
   const { changeTheme, changeLanguage , settings } = useAppContext();
   const { t } = useTranslation();
 

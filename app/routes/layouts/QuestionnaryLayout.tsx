@@ -1,6 +1,6 @@
 import { type ReactNode, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Tabbar } from '@/components/tabbar';
+import { Tabbar } from '@/components/Tabbar';
 
 import { l } from 'hds-lib-js';
 

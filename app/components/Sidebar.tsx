@@ -1,15 +1,15 @@
-import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { NavLink } from "react-router-dom";
-import { useAppContext } from "@/context/AppContext";
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { NavLink } from 'react-router-dom';
+import { useAppContext } from '@/context/AppContext';
 
-import { getAppManaging, showLoginButton } from "@/dr-lib";
+import { getAppManaging, showLoginButton } from '@/dr-lib';
 
 function FormEntry({ href, name }) {
   const isCurrent = getId(window.location.pathname) === getId(href);
   const classes = isCurrent
-    ? "flex items-center p-2 text-blue-600 bg-gray-100 rounded-lg active dark:bg-gray-800 dark:text-blue-500 group"
-    : "flex items-center p-2 text-gray-900 rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 group";
+    ? 'flex items-center p-2 text-blue-600 bg-gray-100 rounded-lg active dark:bg-gray-800 dark:text-blue-500 group'
+    : 'flex items-center p-2 text-gray-900 rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 group';
 
   return (
     <li key={name}>
@@ -21,7 +21,7 @@ function FormEntry({ href, name }) {
 }
 
 function getId(path: string) {
-  return path.split("/")[2];
+  return path.split('/')[2];
 }
 
 function Sidebar() {
@@ -32,10 +32,10 @@ function Sidebar() {
   >([]);
 
   useEffect(() => {
-    showLoginButton("login-button", async (state: string) => {
+    showLoginButton('login-button', async (state: string) => {
       updateAppManaging(getAppManaging());
-      console.log("=== signing button new state", state);
-      if (state === "loggedIN") {
+      console.log('=== signing button new state', state);
+      if (state === 'loggedIN') {
         // navigate("/forms");
       }
     });
@@ -43,7 +43,7 @@ function Sidebar() {
 
   useEffect(() => {
     const updateForms = async () => {
-      console.log("Effect: Update forms");
+      console.log('Effect: Update forms');
       const forms = [];
       if (appManaging != null) {
         const collectors = await appManaging.getCollectors();
@@ -55,7 +55,7 @@ function Sidebar() {
           });
         }
       }
-      console.log("###forms", forms);
+      console.log('###forms', forms);
       setForms(forms);
     };
 
@@ -71,7 +71,7 @@ function Sidebar() {
         data-drawer-toggle="sidebar-multi-level-sidebar"
         type="button"
       >
-        <span className="sr-only">{t("openSidebar")}</span>
+        <span className="sr-only">{t('openSidebar')}</span>
         <img src="https://style.datasafe.dev/images/icons/bars-from-left.svg" />
       </button>
 
@@ -94,7 +94,7 @@ function Sidebar() {
               <div className="group flex items-center rounded-lg p-2 text-gray-900 dark:text-white">
                 <img src="https://style.datasafe.dev/images/icons/file-pen-solid.svg" />
                 <span className="ms-3 flex-1 whitespace-nowrap dark:text-gray-300">
-                  {t("forms")}
+                  {t('forms')}
                 </span>
               </div>
             </li>
@@ -112,7 +112,7 @@ function Sidebar() {
               >
                 <img src="https://style.datasafe.dev/images/icons/life-saver-solid.svg" />
                 <span className="ms-3 flex-1 whitespace-nowrap dark:text-gray-300">
-                  {t("help")}
+                  {t('help')}
                 </span>
               </a>
             </li>
@@ -123,7 +123,7 @@ function Sidebar() {
               >
                 <img src="https://style.datasafe.dev/images/icons/cog-outline.svg" />
                 <span className="ms-3 flex-1 whitespace-nowrap dark:text-gray-300">
-                  {t("settings")}
+                  {t('settings')}
                 </span>
               </NavLink>
             </li>

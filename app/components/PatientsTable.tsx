@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 
-import { Header } from '@/components/table';
+import { Header } from '@/components/Table';
 import { useEffect, useState } from 'react';
 import type Collector from 'hds-lib-js/types/appTemplates/Collector';
 import type CollectorInvite from 'hds-lib-js/types/appTemplates/CollectorInvite';
