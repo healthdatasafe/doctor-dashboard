@@ -5,9 +5,8 @@ import { getAppManaging } from "@/dr-lib";
 import { useTranslation } from "react-i18next";
 
 const DEFAULT_LANGUAGE = "en";
-const DEFAULT_THEME = window.matchMedia("(prefers-color-scheme: dark)").matches
-  ? "dark"
-  : "light";
+// followiing could be considered for auto-setting: window.matchMedia("(prefers-color-scheme: dark)").matches
+const DEFAULT_THEME = 'light';
 
 interface AppContextType {
   appManaging: appTemplates.AppManagingAccount | null;
