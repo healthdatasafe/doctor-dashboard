@@ -11,7 +11,6 @@ export default function SectionTab() {
   return (
     <QuestionnaryLayout
       render={(collector: Collector) => {
-        console.log('>>> Section:', { sectionKey, collector });
         const section = collector?.request.getSectionByKey(sectionKey);
         if (section == null) {
           return <> No Data .. </>;

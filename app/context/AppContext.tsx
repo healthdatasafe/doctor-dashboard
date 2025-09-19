@@ -34,7 +34,6 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({
   const updateAppManaging = (app: appTemplates.AppManagingAccount | null) => {
     setAppManaging(app);
     loadSettings(app);
-    console.log('===== Updated App Managing', app);
   };
 
   const loadSettings = async (app: appTemplates.AppManagingAccount | null) => {
@@ -42,8 +41,6 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({
     const appSettings = await app.getCustomSettings();
     appSettings.language ??= DEFAULT_LANGUAGE;
     appSettings.theme ??= DEFAULT_THEME;
-
-    console.log('===== Setting loaded', appSettings);
     setSettings(appSettings); // this causes settings to save at each load.. 
   }
 
@@ -66,7 +63,6 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const changeTheme = (theme: string) => {
     if (theme !== settings.theme) {
-      console.log(`AppContext changing theme from ${settings.theme} to ${theme}`);
       setSettings({ ...settings, theme });
     }
   }
@@ -75,11 +71,9 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({
     if (language !== settings.language) {
       i18n.changeLanguage(language);
       hdsLibSettings.setPreferredLocales([language]);
-      console.log(`AppContext changing language from ${settings.language} to ${language}`);
       setSettings({ ...settings, language });
     }
   }
-
 
   const value = {
     appManaging,
