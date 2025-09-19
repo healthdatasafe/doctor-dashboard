@@ -99,7 +99,7 @@ function handleClick(link: string) {
   alert('Copied the sharing link to clipboard');
 }
 
-function PatientsTable({ collector }: { collector: Collector }) {
+function PatientsTable({ collector, refreshKey }: { collector: Collector; refreshKey?: number }) {
   const { t } = useTranslation();
   const [patientsList, setPatientList] = useState<CollectorInvite[]>([]);
 
@@ -118,7 +118,7 @@ function PatientsTable({ collector }: { collector: Collector }) {
       setPatientList(invites);
     };
     loadPatients();
-  }, [collector]);
+  }, [collector, refreshKey]);
 
   const columns = [
     t('status'),

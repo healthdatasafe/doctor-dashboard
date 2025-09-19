@@ -9,6 +9,7 @@ export default function PatientsTab() {
  
   const [patientRef, setPatientRef] = useState('');
   const [isButtonDisabled, setButtonDisabled] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   function showErrorMessage(message: string) {
     const patientRefInput = document.getElementById('patientRef') as HTMLObjectElement;
@@ -25,6 +26,7 @@ export default function PatientsTab() {
       const invite = await collector.createInvite(patientRef, options);
       const inviteSharingData = await invite.getSharingData();
       console.log('## createInvite newInvite and sharing', { invite, inviteSharingData });
+      setRefreshKey((k) => k + 1);
     } catch (e: any) {
       showErrorMessage(e.message);
     }
@@ -70,7 +72,7 @@ export default function PatientsTab() {
               </div>
             </form>
 
-            <PatientsTable collector={collector} />
+            <PatientsTable collector={collector} refreshKey={refreshKey} />
           </>
         );
       }}
