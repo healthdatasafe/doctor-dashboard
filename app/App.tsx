@@ -6,7 +6,7 @@ import Patients from '@/routes/questionaryTabs/PatientsTab';
 import Sections from '@/routes/questionaryTabs/SectionTab';
 import Welcome from '@/routes/questionaryTabs/Welcome';
 import SidebarLayout from '@/routes/layouts/SidebarLayout';
-import Patient from '@/routes/patients/PatientData';
+import PatientData from '@/routes/patients/PatientData';
 import Settings from '@/routes/Settings';
 
 export default function App() {
@@ -27,7 +27,7 @@ export default function App() {
               path="forms/:questionaryId/:sectionId"
             />
             <Route
-              element={<Patient />}
+              element={<PatientData />}
               path="patients/:questionaryId/:inviteId"
             />
             <Route element={<Settings />} path="settings" />
