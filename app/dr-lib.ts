@@ -1,5 +1,4 @@
 import { appTemplates, l, pryv, initHDSModel, getHDSModel } from 'hds-lib-js';
-import type { localizableTextLanguages } from 'hds-lib-js/types/localizeText';
 
 /** The name of this application */
 const APP_MANAGING_NAME = 'HDS Dr App PoC';
@@ -158,7 +157,7 @@ async function initDemoAccount() {
     // create the sections contents 
     for (const [key, form] of Object.entries(questionary.forms)) {
       const section = request.createSection(key, form.type);
-      section.setNameLocal(localizableTextLanguages.English, form.name);
+      section.setNameLocal('en', form.name);
       section.addItemKeys(form.itemKeys);
     }
    

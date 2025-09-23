@@ -19,14 +19,22 @@ export default function PatientsTab() {
   async function _createSharingLink(collector: Collector) {
     try {
       console.log('## Clicked >>', patientRef);
-      if (patientRef.length < 5) {
+      const futureName = (patientRef + '').trim();
+      if (futureName.length < 5) {
         throw new Error('Sharing title too short (4 char min)');
       }
+      // check if patientRef in not yet taken
+      const matchingInviteFound = (await collector.getInvites()).find((i) => (i.displayName === futureName));
+      if (matchingInviteFound != null) {
+        throw new Error('An invite with a similar patient reference exists');
+      }
+
       const options = { customData: { hello: 'bob' } };
-      const invite = await collector.createInvite(patientRef, options);
+      const invite = await collector.createInvite(futureName, options);
       const inviteSharingData = await invite.getSharingData();
       console.log('## createInvite newInvite and sharing', { invite, inviteSharingData });
-      setRefreshKey((k) => k + 1);
+      setPatientRef(''); // clearup field
+      setRefreshKey((k) => k + 1); // refresh list
     } catch (e: any) {
       showErrorMessage(e.message);
     }
@@ -39,8 +47,15 @@ export default function PatientsTab() {
         const createSharingLink = async () => { // used to pass "collector"
           setButtonDisabled(true);
           _createSharingLink(collector);
-          return false;
+          
         };
+        if (collector.statusCode !== 'active') {
+          return (
+            <article className="my-2 prose">
+              <h3 className="italic">This questionnary has not been published yet</h3>
+            </article>
+          ) 
+        }
         return (
           <>
             <article className="my-2 prose">

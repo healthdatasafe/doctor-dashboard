@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { useAppContext } from '@/context/AppContext';
 
 import { getAppManaging, showLoginButton } from '@/dr-lib';
@@ -26,6 +26,7 @@ function getId(path: string) {
 
 function Sidebar() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { appManaging, updateAppManaging } = useAppContext();
   const [forms, setForms] = useState<
     { href: string; id: string; name: string }[]
@@ -35,6 +36,9 @@ function Sidebar() {
     showLoginButton('login-button', async (state: string) => {
       updateAppManaging(getAppManaging());
       console.log('=== signing button new state', state);
+      if (state === 'loggedOUT') {
+        navigate('/');
+      }
       if (state === 'loggedIN') {
         // navigate("/forms");
       }

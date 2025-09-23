@@ -8,28 +8,28 @@ import type CollectorInvite from 'hds-lib-js/types/appTemplates/CollectorInvite'
 
 const classes = 'flex items-center gap-1';
 
-function Actions({ patient }: { patient: CollectorInvite }) {
+function Actions({ invite }: { invite: CollectorInvite }) {
   const { t } = useTranslation();
   const [sharingLink, setSharingLink] = useState<string | null>(null);
   useEffect(() => {
     const loadLink = async () => {
-      if (patient.status !== 'pending') return;
-      const inviteSharingData = await patient.getSharingData();
+      if (invite.status !== 'pending') return;
+      const inviteSharingData = await invite.getSharingData();
       const patientURL = 'https://demo-forms.datasafe.dev/patient.html';
       setSharingLink(
         `${patientURL}?apiEndpoint=${inviteSharingData.apiEndpoint}&eventId=${inviteSharingData.eventId}`,
       );
     };
     loadLink();
-  }, [patient]);
+  }, [invite]);
 
   const aclasses =
     'font-medium text-blue-600 hover:underline dark:text-blue-500';
-  if (patient.status === 'active') {
+  if (invite.status === 'active') {
     return (
       <NavLink
         className={aclasses}
-        to={`/patients/${patient.collector.id}/${patient.key}`}
+        to={`/patients/${invite.collector.id}/${invite.key}`}
       >
         <span className={classes}>
           <img src="https://style.datasafe.dev/images/icons/folder-open-outline.svg" />{' '}
@@ -37,7 +37,7 @@ function Actions({ patient }: { patient: CollectorInvite }) {
         </span>
       </NavLink>
     );
-  } else if (patient.status === 'pending') {
+  } else if (invite.status === 'pending') {
     if (sharingLink == null) {
       return <span className="flex items-center gap-3">{t('loading')}</span>;
     }
@@ -61,14 +61,14 @@ function Actions({ patient }: { patient: CollectorInvite }) {
   }
 }
 
-function Body({ patients }: { patients: CollectorInvite[] }) {
+function Body({ patients }: { patients: InviteAndDetails[] }) {
   if (!patients?.[0]) {
     return;
   }
   return (
     <tbody>
       {patients.map((patient) => (
-        <TableBody key={patient.key} patient={patient} />
+        <TableBody key={patient.invite.key} patient={patient} />
       ))}
     </tbody>
   );
@@ -99,9 +99,14 @@ function handleClick(link: string) {
   alert('Copied the sharing link to clipboard');
 }
 
+type InviteAndDetails = {
+  invite: CollectorInvite,
+  username: string
+}
+
 function PatientsTable({ collector, refreshKey }: { collector: Collector; refreshKey?: number }) {
   const { t } = useTranslation();
-  const [patientsList, setPatientList] = useState<CollectorInvite[]>([]);
+  const [patientsList, setPatientList] = useState<InviteAndDetails[]>([]);
 
   useEffect(() => {
     const loadPatients = async () => {
@@ -115,7 +120,24 @@ function PatientsTable({ collector, refreshKey }: { collector: Collector; refres
       invites.sort(
         (a, b) => b.dateCreation.getTime() - a.dateCreation.getTime(),
       ); // sort by creation date reverse
-      setPatientList(invites);
+      const invitesAndDetails: InviteAndDetails[] = [];
+      // fetch usernames
+      for (const invite of invites) {
+        let username = '';
+        if (invite.status === 'active') {
+          try {
+            const accessInfo = await invite.checkAndGetAccessInfo();
+            if (accessInfo) {
+              username = await invite.connection.username();
+            }
+          } catch (e: any) {
+            username = e.message;
+          }
+        }
+        invitesAndDetails.push({invite, username});
+      }
+
+      setPatientList(invitesAndDetails);
     };
     loadPatients();
   }, [collector, refreshKey]);
@@ -123,6 +145,7 @@ function PatientsTable({ collector, refreshKey }: { collector: Collector; refres
   const columns = [
     t('status'),
     t('patientReference'),
+    t('HDSusername'),
     t('submissionDate'),
     t('actions'),
   ];
@@ -174,22 +197,23 @@ function Status({ status }: { status: string }) {
   }
 }
 
-function TableBody({ patient }: { patient: CollectorInvite }) {
+function TableBody({ patient }: { patient: InviteAndDetails }) {
   return (
     <tr
       className="border-b border-gray-200 bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600"
-      key={patient.key}
+      key={patient.invite.key}
     >
       <th
         className="px-6 py-4 font-medium whitespace-nowrap text-gray-900 dark:text-white"
         scope="row"
       >
-        <Status status={patient.status} />
+        <Status status={patient.invite.status} />
       </th>
-      <td className="px-6 py-4">{patient.displayName}</td>
-      <td className="px-6 py-4">{patient.dateCreation.toLocaleString()}</td>
+      <td className="px-6 py-4">{patient.invite.displayName}</td>
+      <td className="px-6 py-4">{patient.username}</td>
+      <td className="px-6 py-4">{patient.invite.dateCreation.toLocaleString()}</td>
       <td className="px-6 py-4">
-        <Actions patient={patient} />
+        <Actions invite={patient.invite} />
       </td>
     </tr>
   );
